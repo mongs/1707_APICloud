@@ -29,3 +29,20 @@ html,body,.wrap{height: 100%;}
   padding-right: 1em;
   font-size: 0.8em;
 }
+.main{
+  flex: 1
+}
+.footer{
+  display: flex;
+}
+.footer li{
+  flex: 1;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  background: #004d40;
+  color: #fff;
+}
+.footer li.active{
+  background: #006064;
+}
