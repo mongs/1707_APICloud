@@ -1,0 +1,31 @@
+html,body,.wrap{height: 100%;}
+.wrap{
+  display: flex;
+  flex-direction: column;
+}
+.header{
+  width: 100%;
+}
+.header li{
+  display: none;
+  position: relative;
+  height: 44px;
+  text-align: center;
+  line-height: 44px;
+  font-size: 1.3em;
+  background: #009688;
+  color: #fff;
+}
+.header li.active{
+  display: block;
+}
+.user{
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 44px;
+  line-height: 44px;
+  padding-left: 1em;
+  padding-right: 1em;
+  font-size: 0.8em;
+}

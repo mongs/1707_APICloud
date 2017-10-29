@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+  <title>Document</title>
+  <link rel="stylesheet" href="../css/api.css">
+  <link rel="stylesheet" href="../css/index.css">
+</head>
+<body>
+  <div class="wrap">
+    <ul class="header">
+      <li class="index active">
+        <span class="user">用户</span>
+        首页
+      </li>
+      <li class="news">
+        新闻
+      </li>
+      <li class="student">
+        学生信息
+      </li>
+      <li class="more">
+        更多
+      </li>
+    </ul>
+    <div class="main">
+
+    </div>
+    <ul class="footer">
+      <li>首页</li>
+      <li>新闻</li>
+      <li>学生信息</li>
+      <li>更多</li>
+    </ul>
+  </div>
+
+  <script>
+    apiready = function() {
+      api.openFrameGroup({
+        name: 'toolBar',
+        rect: {
+          x: 0,
+          y: 44,
+          w: 'auto',
+          h: 'auto'
+        },
+        frames: [{
+          name: 'main',
+          url: './main.html',
+          bgColor: '#fff'
+        }, {
+          name: 'news',
+          url: './news.html',
+          bgColor: '#fff'
+        },{
+          name: 'student',
+          url: './student.html'
+        },{
+          name: 'more',
+          url: './more.html'
+        }]
+      }, function(ret, err) {
+        var index = ret.index;
+      });
+    }
+  </script>
+</body>
+</html>
