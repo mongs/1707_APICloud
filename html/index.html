@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
   <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
   <title>Document</title>
   <link rel="stylesheet" href="../css/api.css">
@@ -12,7 +12,7 @@
   <div class="wrap">
     <ul class="header">
       <li class="index active">
-        <span class="user">用户</span>
+        <span class="user" onclick="openSlid()">用户</span>
         首页
       </li>
       <li class="news">
@@ -29,10 +29,10 @@
 
     </div>
     <ul class="footer">
-      <li class="active">首页</li>
-      <li>新闻</li>
-      <li>学生信息</li>
-      <li>更多</li>
+      <li onclick="changeFrameGroupIndex(0)" class="active">首页</li>
+      <li onclick="changeFrameGroupIndex(1)">新闻</li>
+      <li onclick="changeFrameGroupIndex(2)">学生信息</li>
+      <li onclick="changeFrameGroupIndex(3)">更多</li>
     </ul>
   </div>
 
@@ -47,6 +47,7 @@
 
       api.openFrameGroup({
         name: 'toolBar',
+        scrollEnabled: false,  // 禁止左右滚动
         rect: {
           x: 0,
           y: headerH,
@@ -55,12 +56,10 @@
         },
         frames: [{
           name: 'main',
-          url: './main.html',
-          bgColor: '#fff'
+          url: './main.html'
         }, {
           name: 'news',
-          url: './news.html',
-          bgColor: '#fff'
+          url: './news.html'
         },{
           name: 'student',
           url: './student.html'
@@ -70,6 +69,24 @@
         }]
       }, function(ret, err) {
         var index = ret.index;
+      });
+    }
+    // 打开侧边栏
+    function openSlid() {
+      api.openSlidPane({
+        type: 'left'
+      });
+    }
+    // 底部操作栏切换frameGroup
+    function changeFrameGroupIndex(index) {
+      var tabs = $api.domAll('.footer li');
+      for(var i=0,len=tabs.length;i<len;i++){
+        $api.removeCls(tabs[i], 'active');
+      }
+      $api.addCls(tabs[index], 'active');
+      api.setFrameGroupIndex({
+        name: 'toolBar',
+        index: index
       });
     }
   </script>

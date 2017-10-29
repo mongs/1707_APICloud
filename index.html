@@ -10,10 +10,6 @@
 </head>
 
 <body>
-  <div>
-
-  </div>
-</body>
 <script src="./script/api.js"></script>
 <script>
   apiready = function() {
@@ -24,8 +20,7 @@
       },
       fixedPane: {
         name: 'slid',
-        url: 'html/slid.html',
-        bgColor: '#333'
+        url: 'html/slid.html'
       },
       slidPane: {
         name: 'index',
@@ -34,7 +29,9 @@
     }, function(ret, err) {
 
     });
+    // 禁止手动侧滑
+    api.lockSlidPane();
   };
 </script>
-
+</body>
 </html>
