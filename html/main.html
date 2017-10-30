@@ -5,62 +5,223 @@
     <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
     <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
     <title>Hello APP</title>
-    <link rel="stylesheet" type="text/css" href="../css/api.css" />
-	<style>
-		#con{
-			margin: 10px;
-			font-size: 24px; 
-		}
-		ul{
-			margin-bottom: 10px;
-		}
-		ul li{ 
-			margin: 5px 10px;
-			padding: 5px;
-			color: #000;
-			word-wrap: break-word;
-		}
-	</style>
+    <link rel="stylesheet" href="../css/api.css" />
 </head>
 <body>
-    <label id="con">Hello APP</label>
-	<div id='sys-info'></div>
+
 </body>
-<script type="text/javascript" src="../script/api.js"></script>
-<script type="text/javascript">
-    apiready = function(){
-		var ver = api.version;
-		var sType = api.systemType;
-		var sVer = api.systemVersion;
-		var id = api.deviceId;
-		var model = api.deviceModel;
-		var name = api.deviceName;
-		var cType = api.connectionType;
-		var winName = api.winName;
-		var winWidth = api.winWidth;
-		var winHeight = api.winHeight;
-		var frameName = api.frameName || '';
-		var frameWidth = api.frameWidth || '';
-		var frameHeight = api.frameHeight || '';
-
-		var str = '<ul>';
-		str += '<li>引擎版本信息: ' + ver + '</li>';
-		str += '<li>系统类型: ' + sType + '</li>';
-		str += '<li>系统版本: ' + sVer + '</li>';
-		str += '<li>设备标识: ' + id + '</li>';
-		str += '<li>设备型号: ' + model + '</li>';
-		str += '<li>设备名称: ' + name + '</li>';
-		str += '<li>网络状态: ' + cType + '</li>';
-		str += '<li>主窗口名字: ' + winName + '</li>';
-		str += '<li>主窗口宽度: ' + winWidth + '</li>';
-		str += '<li>主窗口高度: ' + winHeight + '</li>';
-		str += '<li>子窗口名字: ' + frameName + '</li>';
-		str += '<li>子窗口宽度: ' + frameWidth + '</li>';
-		str += '<li>子窗口高度: ' + frameHeight + '</li>';
-		str += '</ul>';
-
-		$api.byId('sys-info').innerHTML = str;
-
-    };
+<script src="../script/api.js"></script>
+<script>
+apiready = function() {
+  var UIScrollPicture = api.require('UIScrollPicture');
+  var UIListView = api.require('UIListView');
+  var shakeView = api.require('shakeView');
+  UIScrollPicture.open({
+    rect: {
+      x: 0,
+      y: 0,
+      w: api.winWidth,
+      h: api.winWidth / 3
+    },
+    data: {
+      paths: [
+        'widget://image/l1.png',
+        'widget://image/l2.png',
+        'widget://image/l3.png'
+      ],
+      captions: ['1', '2', '3']
+    },
+    styles: {
+      caption: {
+        height: 35,
+        color: '#E0FFFF',
+        size: 13,
+        bgColor: 'rgba(0,0,0,.1)',
+        position: 'overlay',
+        alignment: 'right'
+      },
+      indicator: {
+        dot:{
+           w:10,
+           h:10,
+           r:5,
+           margin:3
+        },
+        align: 'center',
+        color: 'rgba(255,255,255,.5)',
+        activeColor: '#DA70D6'
+      }
+    },
+    placeholderImg: 'widget://image/loading_more.gif',
+    contentMode: 'scaleToFill',
+    interval: 3,
+    fixedOn: api.frameName,
+    loop: true,
+    fixed: false
+  }, function(ret, err) {
+      if (ret) {
+        // 点击事件时
+        if(ret.eventType === "click"){
+          alert("点击了第" + ret.index + "张图片");
+        }
+      } else {
+          // alert(JSON.stringify(err));
+      }
+  });
+  api.showProgress({
+    title: '努力加载中...',
+    text: '先喝杯茶...',
+    modal: true
+  });
+  api.ajax({
+    url: 'http://jsonplaceholder.typicode.com/photos',
+    method: 'get',
+    cache: true,
+    data: {
+      values: {
+        albumId: 1
+      }
+    }
+  }, function(ret, err) {
+    if (ret) {
+      var datas = []
+      for(var i=0,len=ret.length;i<len;i++){
+        datas.push({
+          uid: ret[i].id,
+          title: ret[i].title,
+          imgPath: ret[i].thumbnailUrl,
+          remark: '',
+          icon: 'widget://image/demo1.png'
+        })
+      }
+      // alert(JSON.stringify(datas))
+      UIListView.open({
+        rect: {
+          x: 0,
+          y: api.winWidth / 3,
+          w: api.winWidth,
+          h: api.frameHeight - api.winWidth / 3
+        },
+        data: datas,
+        rightBtns: [
+          {
+            bgColor: '#388e8e',
+            activeBgColor: '#338e8e',
+            width: 70,
+            title: '删除',
+            titleSize: 12,
+            titleColor: '#fff',
+            icon: '',
+            iconWidth: 20
+          },
+          {
+            bgColor: '#320e8e',
+            activeBgColor: '#308e8e',
+            width: 70,
+            title: '分享',
+            titleSize: 12,
+            titleColor: '#fff',
+            icon: '',
+            iconWidth: 20
+          }
+        ],
+        styles: {
+          borderColor: '#fafafa',
+          item: {
+            bgColor: '#fff',
+            activeBgColor: '#F5F5F5',
+            height: 55.0,
+            imgWidth: 40,
+            imgHeight: 40,
+            imgCorner: 4,
+            placeholderImg: 'widget://image/demo1.png',
+            titleSize: 14.0,
+            titleColor: '#333',
+            subTitleSize: 12.0,
+            subTitleColor: '#666',
+            remarkColor: '#000',
+            remarkSize: 16,
+            remarkIconWidth: 20
+          }
+        },
+        fixedOn: api.frameName
+      }, function(ret, err) {
+        if (ret) {
+          // alert(JSON.stringify(ret))
+          if(ret.eventType === "clickRightBtn"){
+            if(ret.btnIndex===0){
+              UIListView.deleteItem({
+                index: ret.index
+              }, function(ret, err){
+                if( ret ){
+                  if(ret.status){
+                    api.toast({
+                      msg: '删除成功',
+                      duration: 2000,
+                      location: 'bottom'
+                    });
+                  }
+                }else{
+                  alert( JSON.stringify( err ) );
+                }
+              });
+            } else {
+              api.actionSheet({
+                title: '底部弹出框测试',
+                cancelTitle: '这里是取消按钮',
+                destructiveTitle: '红色警告按钮',
+                buttons: ['1', '2', '摇一摇']
+              }, function(ret, err) {
+                var index = ret.buttonIndex;
+                if(index === 4){
+                  shakeView.open({
+                    x: 0,
+                    y: 0,
+                    w: api.winWidth,
+                    h: api.frameHeight,
+                    type: 'left_right',
+                    img: {
+                      leftUp: 'widget://image/loading_more.png',
+                      rightDown: 'widget://image/demo1.png',
+                      bg: 'widget://image/l3.png'
+                    },
+                    anim: {
+                      time: '2',
+                      sound: '',
+                      isShake: true,
+                      percent: 50
+                    }
+                  });
+                  api.addEventListener({
+                    name:'shake'
+                  }, function(){
+                    shakeView.shake({
+                      anim: {
+                        time: '2',
+                        sound: '',
+                        isShake: true,
+                        percent: 50
+                      }
+                    },function() {
+                      alert(1)
+                    });
+                  });
+                }
+              });
+            }
+          }
+        } else {
+          // alert(JSON.stringify(err));
+        }
+      });
+      setTimeout(function() {
+        api.hideProgress()
+      },2000)
+    } else {
+      api.hideProgress();
+      api.alert({ msg: JSON.stringify(err) });
+    }
+  });
+}
 </script>
 </html>

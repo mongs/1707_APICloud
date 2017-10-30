@@ -21,9 +21,6 @@
       <li class="student">
         学生信息
       </li>
-      <li class="more">
-        更多
-      </li>
     </ul>
     <div class="main">
 
@@ -32,7 +29,7 @@
       <li onclick="changeFrameGroupIndex(0)" class="active">首页</li>
       <li onclick="changeFrameGroupIndex(1)">新闻</li>
       <li onclick="changeFrameGroupIndex(2)">学生信息</li>
-      <li onclick="changeFrameGroupIndex(3)">更多</li>
+      <li onclick="openMoreWin()">更多</li>
     </ul>
   </div>
 
@@ -63,9 +60,6 @@
         },{
           name: 'student',
           url: './student.html'
-        },{
-          name: 'more',
-          url: './more.html'
         }]
       }, function(ret, err) {
         var index = ret.index;
@@ -80,13 +74,23 @@
     // 底部操作栏切换frameGroup
     function changeFrameGroupIndex(index) {
       var tabs = $api.domAll('.footer li');
-      for(var i=0,len=tabs.length;i<len;i++){
+      var headerLis = $api.domAll('.header li')
+      for(var i=0,len=tabs.length - 1;i<len;i++){
         $api.removeCls(tabs[i], 'active');
+        $api.removeCls(headerLis[i], 'active');
       }
       $api.addCls(tabs[index], 'active');
+      $api.addCls(headerLis[index], 'active');
       api.setFrameGroupIndex({
         name: 'toolBar',
         index: index
+      });
+    }
+    // 打开更多窗口
+    function openMoreWin() {
+      api.openWin({
+        name: 'more',
+        url: './more.html'
       });
     }
   </script>

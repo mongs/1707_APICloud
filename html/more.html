@@ -4,8 +4,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link rel="stylesheet" href="../css/aui.css">
 </head>
 <body>
-More
+<header class="aui-bar aui-bar-nav aui-bg-indigo">
+  <div class="aui-pull-left aui-btn" onclick="closeCurrentWin()">
+    <span class="aui-iconfont aui-icon-left"></span>返回
+  </div>
+  <div class="aui-title">更多</div>
+</header>
+<script src="../script/api.js"></script>
+<script src="../script/base.js"></script>
+<script>
+  apiready = function() {
+    var header = $api.dom('header');
+    var headerH = $api.offset(header).h;
+    // 打开子窗口
+    api.openFrame({
+        name: 'more_frame',
+        url: './more_frame.html',
+        rect: {
+            x: 0,
+            y: headerH,
+            w: 'auto',
+            h: api.winHeight - headerH
+        },
+        bounces: true,
+        vScrollBarEnabled: true,
+        hScrollBarEnabled: false
+    });
+
+  }
+</script>
 </body>
 </html>
