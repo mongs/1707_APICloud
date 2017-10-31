@@ -6,10 +6,49 @@
   <title>Document</title>
 </head>
 <body>
-more_frame
+<script type="text/x-dot-template" id="newListTml">
+  {{ for(var i=0,len=it.length;i<len;i++){ }}
+    <a onclick="showNewInfo({{= it[i].news_id }})">
+      <h3>{{= it[i].title }}</h3>
+      <img src="{{= it[i].top_image }}" />
+    </a>
+  {{ } }}
+</script>
+<div id="newList"></div>
+
+<script src="../script/api.js"></script>
+<script src="../script/doT.min.js"></script>
 <script>
+  var tableNum = ''
   apiready = function() {
-    alert(api.pageParam.tableNum)
+    tableNum = api.pageParam.tableNum
+    api.ajax({
+        url: 'http://api.dagoogle.cn/news/get-news',
+        method: 'get',
+        data: {
+          values: {
+            tableNum: tableNum
+          }
+        }
+    },function(ret, err){
+        if (ret) {
+          var data = ret.data;
+          var tmp = doT.template($api.byId('newListTml').innerHTML)
+          $api.byId('newList').innerHTML = tmp(data);
+        } else {
+          alert( JSON.stringify( err ) );
+        }
+    });
+  }
+  function showNewInfo(id) {
+    api.openWin({
+        name: 'news_info',
+        url: './news_info.html',
+        pageParam: {
+            news_id: id,
+            tableNum: tableNum
+        }
+    });
   }
 </script>
 </body>

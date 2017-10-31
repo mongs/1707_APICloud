@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  <title>Document</title>
+  <link rel="stylesheet" href="../css/aui.css">
+</head>
+<body>
+<header class="aui-bar aui-bar-nav">
+  <div class="aui-pull-left aui-btn" onclick="closeCurrentWin()">
+    <span class="aui-iconfont aui-icon-left"></span>返回
+  </div>
+  <div class="aui-title">新闻详情</div>
+</header>
+<script src="../script/base.js"></script>
+<script>
+apiready = function() {
+  alert(JSON.stringify(api.pageParam))
+  var news_id = api.pageParam.news_id
+  var tableNum = api.pageParam.tableNum
+  api.openFrame({
+      name: 'news_info_frame',
+      url: './news_info_frame.html',
+      rect: {
+          x: 0,
+          y: 44,
+          w: 'auto',
+          h: api.winHeight-44
+      },
+      pageParam: {
+        news_id: news_id,
+        tableNum: tableNum
+      },
+      bounces: true,
+      bgColor: 'rgba(0,0,0,0)',
+      vScrollBarEnabled: true,
+      hScrollBarEnabled: true
+  });
+
+}
+</script>
+</body>
+</html>

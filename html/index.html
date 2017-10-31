@@ -51,6 +51,7 @@
           w: 'auto',
           h: mainH
         },
+        preload: 0,
         frames: [{
           name: 'main',
           url: './main.html'
@@ -73,6 +74,20 @@
     }
     // 底部操作栏切换frameGroup
     function changeFrameGroupIndex(index) {
+      var hideFn = "hideNewsFrame()";
+      var showFn = "showNewsFrame()";
+      if(index !== 1){
+        // 跨页面执行脚本
+        api.execScript({
+          frameName: 'news',
+          script: hideFn
+        });
+      }else{
+        api.execScript({
+          frameName: 'news',
+          script: showFn
+        });
+      }
       var tabs = $api.domAll('.footer li');
       var headerLis = $api.domAll('.header li')
       for(var i=0,len=tabs.length - 1;i<len;i++){
