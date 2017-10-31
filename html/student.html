@@ -4,8 +4,72 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link rel="stylesheet" href="../css/aui.css">
 </head>
 <body>
-Student
+<div class="aui-btn aui-btn-info" tapmode onclick="getStudentsData()">
+  <span class="aui-iconfont aui-icon-edit"></span>
+  请求数据
+</div>
+<script type="text/x-dot-template" id="studentsTml">
+{{ for(var i=0,len=it.length;i<len;i++){ }}
+<div class="aui-card-list">
+  <div class="aui-card-list-header aui-card-list-user aui-border-b">
+    <div class="aui-card-list-user-avatar">
+      <img src="../image/demo1.png" class="aui-img-round" />
+    </div>
+    <div class="aui-card-list-user-name">
+      <div>{{= it[i].name }}</div>
+      <small>{{= it[i].age }}</small>
+    </div>
+    <div class="aui-card-list-user-info">北京朝阳</div>
+  </div>
+  <div class="aui-card-list-content-padded">
+    <img src="{{= it[i].img.url }}" />
+  </div>
+  <div class="aui-card-list-footer aui-border-t">
+    <div><i class="aui-iconfont aui-icon-note"></i> 666</div>
+    <div><i class="aui-iconfont aui-icon-laud"></i> 888</div>
+    <div><i class="aui-iconfont aui-icon-star"></i> 888</div>
+  </div>
+</div>
+{{ } }}
+</script>
+
+<div id="students"></div>
+
+<script src="../script/api.js"></script>
+<script src="../script/doT.min.js"></script>
+<script src="../script/base.js"></script>
+<script>
+function getStudentsData() {
+  showProgress()
+  var url = 'https://d.apicloud.com/mcm/api';
+  var appId = 'A6054797274762';
+  var key = 'DEB42788-C2B3-9DBE-43B0-B3FCDF81CD88';
+  var now = Date.now();
+  var appKey = SHA1(appId + 'UZ' + key + 'UZ' + now) + '.' + now;
+
+  api.ajax({
+    url: url + '/students',
+    method: 'get',
+    "headers": {
+      "X-APICloud-AppId": appId,
+      "X-APICloud-AppKey": appKey
+    }
+  },function(ret, err){
+      if (ret) {
+        alert(JSON.stringify(ret))
+        var tml = doT.template($api.byId('studentsTml').innerHTML);
+        $api.byId('students').innerHTML = tml(ret);
+        hideProgress()
+      } else {
+        hideProgress()
+        alert( JSON.stringify( err ) );
+      }
+  });
+
+}
+</script>
 </body>
 </html>

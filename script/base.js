@@ -2,7 +2,7 @@
 function closeCurrentWin() {
   api.closeWin();
 }
-//SHA1
+// SHA1加密算法
 function SHA1(msg) {
 
   function rotate_left(n, s) {
@@ -167,4 +167,21 @@ function SHA1(msg) {
 
   return temp.toLowerCase();
 
+}
+
+// 显示loading
+function showProgress() {
+  api.showProgress({
+      style: 'default',
+      animationType: 'fade',
+      title: '玩命加载中...',
+      text: '先喝杯茶...',
+      modal: false
+  });
+}
+// 隐藏progress
+function hideProgress() {
+  setTimeout(function() {
+    api.hideProgress();
+  }, 300)
 }

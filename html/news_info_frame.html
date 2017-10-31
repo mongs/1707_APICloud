@@ -23,6 +23,11 @@
 apiready = function() {
   var tableNum = api.pageParam.tableNum;
   var news_id = api.pageParam.news_id;
+  api.showProgress({
+    title: '努力加载中...',
+    text: '先喝杯茶...',
+    modal: false
+  });
   api.ajax({
       url: ' http://api.dagoogle.cn/news/single-news',
       method: 'get',
@@ -37,7 +42,9 @@ apiready = function() {
         var data = ret.data
         var tml = doT.template($api.byId('newsTml').innerHTML)
         $api.byId('news').innerHTML = tml(data);
+        api.hideProgress();
       } else {
+        api.hideProgress();
         alert( JSON.stringify( err ) );
       }
   });
