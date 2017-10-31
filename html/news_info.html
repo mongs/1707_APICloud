@@ -16,7 +16,6 @@
 <script src="../script/base.js"></script>
 <script>
 apiready = function() {
-  alert(JSON.stringify(api.pageParam))
   var news_id = api.pageParam.news_id
   var tableNum = api.pageParam.tableNum
   api.openFrame({
@@ -24,9 +23,9 @@ apiready = function() {
       url: './news_info_frame.html',
       rect: {
           x: 0,
-          y: 44,
+          y: 70,
           w: 'auto',
-          h: api.winHeight-44
+          h: api.winHeight-70
       },
       pageParam: {
         news_id: news_id,
@@ -35,7 +34,7 @@ apiready = function() {
       bounces: true,
       bgColor: 'rgba(0,0,0,0)',
       vScrollBarEnabled: true,
-      hScrollBarEnabled: true
+      hScrollBarEnabled: false
   });
 
 }

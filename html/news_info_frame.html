@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<script type="text/x-dot-template" id="newsTml">
+  <h3>{{= it.title }}</h3>
+  <span>新闻来源： {{= it.source }} </span>
+  <span>评论数：{{= it.reply_count }} 条</span>
+  <span>编辑时间：{{= it.edit_time }} </span>
+  <br/>
+  <img src="{{= it.top_image }}" alt="{{= it.title }}"/>
+  <p>{{= it.content }}</p>
+</script>
+<div id="news"></div>
+
+<script src="../script/api.js"></script>
+<script src="../script/doT.min.js"></script>
+<script>
+apiready = function() {
+  var tableNum = api.pageParam.tableNum;
+  var news_id = api.pageParam.news_id;
+  api.ajax({
+      url: ' http://api.dagoogle.cn/news/single-news',
+      method: 'get',
+      data: {
+        values: {
+          news_id: news_id,
+          tableNum: tableNum
+        }
+      }
+  },function(ret, err){
+      if (ret) {
+        var data = ret.data
+        var tml = doT.template($api.byId('newsTml').innerHTML)
+        $api.byId('news').innerHTML = tml(data);
+      } else {
+        alert( JSON.stringify( err ) );
+      }
+  });
+
+}
+</script>
+</body>
+</html>
