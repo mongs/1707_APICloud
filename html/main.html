@@ -178,18 +178,12 @@ apiready = function() {
                     x: 0,
                     y: 0,
                     w: api.winWidth,
-                    h: api.frameHeight,
+                    h: api.winHeight,
                     type: 'left_right',
                     img: {
                       leftUp: 'widget://image/loading_more.png',
                       rightDown: 'widget://image/demo1.png',
                       bg: 'widget://image/l3.png'
-                    },
-                    anim: {
-                      time: '2',
-                      sound: 'widget://res/sound.mp3',
-                      isShake: true,
-                      percent: 50
                     }
                   });
                   api.addEventListener({
@@ -203,7 +197,7 @@ apiready = function() {
                         percent: 50
                       }
                     },function() {
-                      alert(1)
+                      shakeView.hide();
                     });
                   });
                 }

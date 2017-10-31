@@ -4,8 +4,102 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link rel="stylesheet" type="text/css" href="../css/aui.css">
 </head>
 <body>
-  news
+
+  <script>
+    apiready = function() {
+      var NVNavigationBar = api.require('NVNavigationBar');
+      NVNavigationBar.open({
+        rect: {
+          x: 0,
+          y: 0,
+          w: api.winWidth,
+          h: 30
+        },
+        styles: {
+          orientation: 'horizontal',
+          bg: '#6b6b6b',
+          bgAlpha: 1,
+          font: {
+            size: 14,
+            sizeSelected: 16,
+            color: '#FFFFFF',
+            colorSelected: '#fff',
+            alpha: 1
+          },
+          itemSize: {
+            w: 90,
+            h: 44
+          }
+        },
+        items: [{
+          title: '头条',
+          bg: '#63c1b9',
+          bgSelected: '#167970'
+        },{
+          title: '娱乐',
+          bg: '#63c1b9',
+          bgSelected: '#167970'
+        },{
+          title: '军事',
+          bg: '#63c1b9',
+          bgSelected: '#167970'
+        },{
+          title: '汽车',
+          bg: '#63c1b9',
+          bgSelected: '#167970'
+        },{
+          title: '财经',
+          bg: '#63c1b9',
+          bgSelected: '#167970'
+        },{
+          title: '笑话',
+          bg: '#63c1b9',
+          bgSelected: '#167970'
+        },{
+          title: '体育',
+          bg: '#63c1b9',
+          bgSelected: '#167970'
+        },{
+          title: '科技',
+          bg: '#63c1b9',
+          bgSelected: '#167970'
+        }],
+        selectedIndex: 1,
+        fixedOn: api.frameName,
+        id: 'first'
+      }, function(ret, err) {
+        if(ret.eventType==="click"){
+          openNewsInfo(ret.index+1)
+        }else{
+          openNewsInfo(1)
+        }
+      });
+    }
+
+    function openNewsInfo(index) {
+      api.openFrame({
+        name: 'news_frame',
+        url: './news_frame.html',
+        rect: {
+            x: 0,
+            y: 70,
+            w: 'auto',
+            h: api.winHeight-120
+        },
+        reload: true,  // 重新渲染
+        pageParam: {   //页面之间传递参数
+          tableNum: index
+        },
+        bounces: true,
+        bgColor: 'rgba(0,0,0,0)',
+        vScrollBarEnabled: true,
+        hScrollBarEnabled: false
+      });
+
+    }
+  </script>
 </body>
 </html>
