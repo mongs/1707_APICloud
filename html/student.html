@@ -11,6 +11,18 @@
   <span class="aui-iconfont aui-icon-edit"></span>
   请求数据
 </div>
+
+<br>
+
+<div class="aui-btn aui-btn-info" tapmode onclick="addStudentsData()">
+  <span class="aui-iconfont aui-icon-edit"></span>
+  添加数据
+</div>
+<div class="aui-btn aui-btn-info" tapmode onclick="getStudentDataById()">
+  <span class="aui-iconfont aui-icon-edit"></span>
+  通过ID获取数据
+</div>
+
 <script type="text/x-dot-template" id="studentsTml">
 {{ for(var i=0,len=it.length;i<len;i++){ }}
 <div class="aui-card-list">
@@ -38,30 +50,126 @@
 
 <div id="students"></div>
 
+<ul class="aui-list aui-form-list">
+  <li class="aui-list-header">带有图标的表单</li>
+  <li class="aui-list-item">
+      <div class="aui-list-item-inner">
+          <div class="aui-list-item-label-icon">
+              <i class="aui-iconfont aui-icon-mobile"></i>
+          </div>
+          <div class="aui-list-item-input">
+              <input id="username" type="text" placeholder="username">
+          </div>
+      </div>
+  </li>
+  <li class="aui-list-item">
+      <div class="aui-list-item-inner">
+          <div class="aui-list-item-label-icon">
+              <i class="aui-iconfont aui-icon-lock"></i>
+          </div>
+          <div class="aui-list-item-input">
+              <input id="password" type="password" placeholder="password">
+          </div>
+          <div class="aui-list-item-label-icon">
+              <i class="aui-iconfont aui-icon-display"></i>
+          </div>
+      </div>
+  </li>
+</ul>
+<div class="aui-btn aui-btn-block" tapmode onclick="register()">注册</div>
+<div class="aui-btn aui-btn-block" tapmode onclick="login()">登录</div>
+<div class="aui-btn aui-btn-block" tapmode onclick="logout()">退出登录</div>
+
 <script src="../script/api.js"></script>
 <script src="../script/doT.min.js"></script>
 <script src="../script/base.js"></script>
 <script>
+/*
+一般情况下, 注册成功以后 就不需要再登录了
+自动登录: storage 把 用户信息存起来 id, username
+下次登录时获取storage 中的用户信息  就可以进行显示
+*/
+function register() {
+  var username = $api.byId('username').value;
+  var password = $api.byId('password').value;
+  var data = {
+    values: {
+      username: username,
+      password: password
+    }
+  }
+  apiAjax('/user', 'POST', false, data, function(ret) {
+    alert(JSON.stringify(ret))
+  })
+}
+// 登录
+function login() {
+  var username = $api.byId('username').value;
+  var password = $api.byId('password').value;
+  var data = {
+    values: {
+      username: username,
+      password: password
+    }
+  }
+  apiAjax('/user/login', 'POST', false, data, function(ret) {
+    // alert(JSON.stringify(ret))
+    var userId = ret.userId   // 表中行的ObjectId
+    var id = ret.id           // tockenId  权限
+    var userInfo = {
+      userId: userId,
+      id: id
+    }
+    $api.setStorage('userInfo', userInfo);
+    api.sendEvent({
+      name: 'login-success'
+    });
+    alert('登录成功')
+  })
+}
+// 退出登录
+function logout() {
+  var id = $api.getStorage('userInfo').id;
+  apiAjax('/user/logout', 'POST', id, {}, function(ret) {
+    // alert(JSON.stringify(ret))
+    $api.rmStorage('userInfo');
+    api.sendEvent({
+      name: 'logout-success'
+    });
+    alert('退出登录成功')
+  })
+}
+
+
 function getStudentsData() {
+  apiAjax('/students1', 'get', false, {}, function(ret) {
+    var tml = doT.template($api.byId('studentsTml').innerHTML);
+    $api.byId('students').innerHTML = tml(ret);
+  })
+}
+function addStudentsData() {
   showProgress()
   var url = 'https://d.apicloud.com/mcm/api';
   var appId = 'A6054797274762';
   var key = 'DEB42788-C2B3-9DBE-43B0-B3FCDF81CD88';
   var now = Date.now();
   var appKey = SHA1(appId + 'UZ' + key + 'UZ' + now) + '.' + now;
-
   api.ajax({
     url: url + '/students',
-    method: 'get',
+    method: 'post',
     "headers": {
       "X-APICloud-AppId": appId,
       "X-APICloud-AppKey": appKey
+    },
+    data: {
+      values: {
+        name: '张三',
+        age: 71
+      }
     }
   },function(ret, err){
       if (ret) {
-        alert(JSON.stringify(ret))
-        var tml = doT.template($api.byId('studentsTml').innerHTML);
-        $api.byId('students').innerHTML = tml(ret);
+        alert( JSON.stringify( ret ) );
         hideProgress()
       } else {
         hideProgress()
@@ -70,6 +178,35 @@ function getStudentsData() {
   });
 
 }
+function getStudentDataById() {
+  showProgress()
+  var url = 'https://d.apicloud.com/mcm/api';
+  var appId = 'A6054797274762';
+  var key = 'DEB42788-C2B3-9DBE-43B0-B3FCDF81CD88';
+  var now = Date.now();
+  var appKey = SHA1(appId + 'UZ' + key + 'UZ' + now) + '.' + now;
+  api.ajax({
+    url: url + '/students/0059f8257f0426225d60dc177a',
+    method: 'delete',
+    "headers": {
+      "X-APICloud-AppId": appId,
+      "X-APICloud-AppKey": appKey
+    }
+  },function(ret, err){
+      if (ret) {
+        alert( JSON.stringify( ret ) );
+        hideProgress()
+      } else {
+        hideProgress()
+        alert( JSON.stringify( err ) );
+      }
+  });
+
+}
+
+
+
+
 </script>
 </body>
 </html>

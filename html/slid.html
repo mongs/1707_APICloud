@@ -8,6 +8,50 @@
   <link rel="stylesheet" href="../css/aui.css">
 </head>
 <body>
-  slid
+  <h3></h3>
+<script src="../script/api.js"></script>
+<script src="../script/base.js"></script>
+<script>
+/*
+检测是否有userId,
+如果userId存在, 就显示用户名/头像
+如果只是要获取个用户名(简单的内容)的话, 把用户名存storage
+*/
+apiready = function() {
+
+  api.addEventListener({
+    name: 'login-success'
+  }, function(ret, err){
+    if( ret ){
+      alert('登录')
+      location.reload()
+    }
+  });
+  api.addEventListener({
+    name: 'logout-success'
+  }, function(ret, err){
+    if( ret ){
+      alert('退出登录')
+      location.reload()
+    }
+  });
+
+
+  var userInfo = $api.getStorage('userInfo');
+  alert(JSON.stringify(userInfo))
+  if(userInfo){
+    var userId = userInfo.userId;
+    var id = userInfo.id
+    apiAjax('/user/' + userId, 'get', id, {}, function(ret) {
+      // alert(JSON.stringify(ret))
+      var username = ret.username
+      $api.dom('h3').innerHTML = "用户名:" + username
+    })
+  }else{
+    $api.dom('h3').innerHTML = "请登录"
+  }
+}
+
+</script>
 </body>
 </html>

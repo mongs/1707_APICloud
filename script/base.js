@@ -185,3 +185,44 @@ function hideProgress() {
     api.hideProgress();
   }, 300)
 }
+/**
+apiAjax('/user', 'get', {value: {
+  username: 'wally',
+  password: '123'
+}}, function(ret){
+
+})
+*/
+function apiAjax(url, method, authorizationId, data, callback) {
+  showProgress()  // 显示loading
+  var _url = 'https://d.apicloud.com/mcm/api';
+  var appId = 'A6054797274762';
+  var key = 'DEB42788-C2B3-9DBE-43B0-B3FCDF81CD88';
+  var now = Date.now();
+  var appKey = SHA1(appId + 'UZ' + key + 'UZ' + now) + '.' + now;
+  var headers = {
+    "X-APICloud-AppId": appId,
+    "X-APICloud-AppKey": appKey
+  }
+  if(authorizationId){
+    headers = {
+      "X-APICloud-AppId": appId,
+      "X-APICloud-AppKey": appKey,
+      "Authorization": authorizationId
+    }
+  }
+  api.ajax({
+    url: _url + url,
+    method: method,
+    data: data,
+    "headers": headers
+  }, function(ret, err) {
+    if(ret) {
+      hideProgress()  // 隐藏loading
+      callback(ret)
+    }else{
+      hideProgress()  // 隐藏loading
+      alert(JSON.stringify(err))
+    }
+  });
+}
