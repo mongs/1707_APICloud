@@ -23,7 +23,7 @@ apiready = function() {
     name: 'login-success'
   }, function(ret, err){
     if( ret ){
-      alert('登录')
+      // alert('登录')
       location.reload()
     }
   });
@@ -31,14 +31,14 @@ apiready = function() {
     name: 'logout-success'
   }, function(ret, err){
     if( ret ){
-      alert('退出登录')
+      // alert('退出登录')
       location.reload()
     }
   });
 
 
   var userInfo = $api.getStorage('userInfo');
-  alert(JSON.stringify(userInfo))
+  // alert(JSON.stringify(userInfo))
   if(userInfo){
     var userId = userInfo.userId;
     var id = userInfo.id
